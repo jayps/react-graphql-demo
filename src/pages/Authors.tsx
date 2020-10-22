@@ -1,11 +1,10 @@
 import React, {useContext} from 'react';
-import PageLayout from "../components/PageLayout";
 import {AuthorsContext} from "../contexts/authors/AuthorsContext";
 import {Author} from "../types/Author";
 import {Link} from "react-router-dom";
 
 const AuthorsPage = () => {
-    const {authors, loading, error, getAuthors} = useContext(AuthorsContext);
+    const {authors, loading, error, getAuthors, deleteAuthor} = useContext(AuthorsContext);
 
     React.useEffect(() => {
         getAuthors();
@@ -29,6 +28,7 @@ const AuthorsPage = () => {
                 !loading && !error && (
                     <div>
                         <Link to="/add-author">Add author</Link>
+                        <hr />
                     </div>
                 )
             }
@@ -44,7 +44,7 @@ const AuthorsPage = () => {
                 !loading && !error && authors.length > 0 && (
                     authors.map((author: Author) => (
                         <div>
-                            <strong>{author.name}</strong>
+                            <button onClick={() => deleteAuthor(author.id, author.name)}>&times;</button>&nbsp;<Link to={`/authors/${author.id}`}>{author.name}</Link>
                         </div>
                     ))
                 )

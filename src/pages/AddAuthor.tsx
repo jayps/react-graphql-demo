@@ -1,10 +1,5 @@
 import React, {useContext} from 'react';
-import PageLayout from "../components/PageLayout";
 import {AuthorsContext} from "../contexts/authors/AuthorsContext";
-import {Author} from "../types/Author";
-import { useHistory } from 'react-router-dom';
-import {useMutation} from "@apollo/client";
-import {AddAuthorMutation} from "../graphql/mutations/AddAuthorMutation";
 
 const AddAuthorPage = () => {
     const {addAuthor} = useContext(AuthorsContext);

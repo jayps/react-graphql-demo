@@ -1,3 +1,5 @@
+import {Author} from "../../types/Author";
+
 export default (state: any, action: any) => {
     switch (action.type) {
         case 'GET_AUTHORS':
@@ -16,6 +18,11 @@ export default (state: any, action: any) => {
             return {
                 ...state,
                 authors: state.authors.push(action.payload)
+            }
+        case 'DELETE_AUTHOR':
+            return {
+                ...state,
+                loading: true
             }
         default:
             return state;
