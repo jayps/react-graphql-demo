@@ -16,6 +16,8 @@ export interface AuthorsState {
     authors: Author[];
     loading: boolean;
     error: boolean;
+    deletingAuthor: boolean;
+    deletingBook: boolean;
     currentAuthor?: Author | null;
     addAuthor: (name: string) => void
     addBook: (book: Book) => void
@@ -29,6 +31,8 @@ const initialState: AuthorsState = {
     authors: [],
     loading: false,
     error: false,
+    deletingAuthor: false,
+    deletingBook: false,
     currentAuthor: null,
     addAuthor: () => {
     },
@@ -72,6 +76,10 @@ const AuthorsProvider = ({children, client}: any) => {
                     type: 'GET_AUTHORS_SUCCESS',
                     payload: result.data.listAuthors.items
                 });
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 
@@ -100,17 +108,24 @@ const AuthorsProvider = ({children, client}: any) => {
     }
 
     const addAuthor = (name: string) => {
+        dispatch({
+            type: 'CREATE_AUTHOR'
+        })
+
         addAuthorMutation(
             {
                 variables: {name}
             })
             .then((res) => {
-                getAuthors();
-                history.push('/');
+                history.push(`/authors/${res.data.createAuthor.id}`);
             });
     }
 
     const addBook = (book: Book) => {
+        dispatch({
+            type: 'CREATE_BOOK'
+        })
+
         addBookMutation(
             {
                 variables: {...book}
@@ -130,6 +145,10 @@ const AuthorsProvider = ({children, client}: any) => {
                 variables: {id}
             })
             .then((res) => {
+                dispatch({
+                    type: 'DELETE_AUTHOR_SUCCESS'
+                });
+
                 getAuthors();
             });
     }
@@ -159,6 +178,8 @@ const AuthorsProvider = ({children, client}: any) => {
             authors: state.authors,
             loading: state.loading,
             error: state.error,
+            deletingAuthor: state.deletingAuthor,
+            deletingBook: state.deletingBook,
             currentAuthor: state.currentAuthor,
             addAuthor,
             getAuthorById,

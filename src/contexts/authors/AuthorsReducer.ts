@@ -19,20 +19,40 @@ export default (state: any, action: any) => {
                 loading: false,
                 currentAuthor: action.payload
             }
-        case 'ADD_AUTHOR':
+        case 'CREATE_AUTHOR':
             return {
                 ...state,
-                authors: state.authors.push(action.payload)
+                loading: true
             }
         case 'DELETE_AUTHOR':
             return {
                 ...state,
-                loading: true
+                deletingAuthor: true
+            }
+        case 'DELETE_AUTHOR_SUCCESS':
+            return {
+                ...state,
+                deletingAuthor: false
             }
         case 'DELETE_BOOK':
             return {
                 ...state,
+                deletingBook: true
+            }
+        case 'DELETE_BOOK_SUCCESS':
+            return {
+                ...state,
+                deletingBook: false
+            }
+        case 'CREATE_BOOK':
+            return {
+                ...state,
                 loading: true
+            }
+        case 'ERROR':
+            return {
+                ...state,
+                error: true
             }
         default:
             return state;

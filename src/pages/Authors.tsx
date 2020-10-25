@@ -3,9 +3,10 @@ import {AuthorsContext} from "../contexts/authors/AuthorsContext";
 import {Author} from "../types/Author";
 import {Link} from "react-router-dom";
 import PageLayout from "../components/PageLayout";
-import {Button} from "reactstrap";
+import {Alert, Button} from "reactstrap";
 import styled from "styled-components";
 import PageHeader from "../components/PageHeader";
+import Loader from "../components/Loader";
 
 const AuthorListItem = styled(Link)`
     padding: 16px;
@@ -23,7 +24,7 @@ const AuthorListItem = styled(Link)`
 `;
 
 const AuthorsPage = () => {
-    const {authors, loading, error, getAuthors, deleteAuthor} = useContext(AuthorsContext);
+    const {authors, loading, error, getAuthors, deleteAuthor, deletingAuthor} = useContext(AuthorsContext);
 
     React.useEffect(() => {
         getAuthors();
@@ -34,50 +35,40 @@ const AuthorsPage = () => {
         deleteAuthor(id, name);
     }
 
+    if (error) {
+        throw new Error('Something has gone wrong!');
+    }
+
     return (
         <PageLayout>
             <PageHeader>
                 <h1>Authors</h1>
-                {
-                    !loading && !error && (
                         <div>
                             <Link to="/add-author" className="btn btn-primary">Add Author</Link>
                         </div>
+            </PageHeader>
+            <Loader loading={loading || deletingAuthor} message={deletingAuthor ? 'Deleting author...' : 'Loading authors...'}>
+                {
+                    authors.length === 0 && (
+                        <Alert color="info">
+                            No authors found. Would you like to <strong><Link to="/add-author">add a new author</Link></strong>?
+                        </Alert>
                     )
                 }
-            </PageHeader>
-            {
-                loading && (
-                    <p>Loading...</p>
-                )
-            }
-            {
-                error && (
-                    <p>Oops! Something has gone wrong. Please try again.</p>
-                )
-            }
-
-
-            {
-                !loading && !error && authors.length === 0 && (
-                    <p>
-                        No authors found.
-                    </p>
-                )
-            }
-            {
-                !loading && !error && authors.length > 0 && (
-                    authors.map((author: Author) => (
-                        <AuthorListItem key={author.id} to={`/authors/${author.id}`}>
-                            {author.name}
-                            <Button onClick={(e) => onClickDeleteAuthor(e, author.id, author.name)}
-                                    className="btn btn-danger">
-                                Delete
-                            </Button>
-                        </AuthorListItem>
-                    ))
-                )
-            }
+                {
+                    !loading && !error && authors.length > 0 && (
+                        authors.map((author: Author) => (
+                            <AuthorListItem key={author.id} to={`/authors/${author.id}`}>
+                                {author.name}
+                                <Button onClick={(e) => onClickDeleteAuthor(e, author.id, author.name)}
+                                        className="btn btn-danger">
+                                    Delete
+                                </Button>
+                            </AuthorListItem>
+                        ))
+                    )
+                }
+            </Loader>
         </PageLayout>
     )
 }

@@ -24,7 +24,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({children}: PageLayoutProps) => {
                                     <NavLink to="/authors/">Authors</NavLink>
                                 </NavItem>
                             </Nav>
-                            <NavbarText>Simple Text</NavbarText>
                         </Collapse>
                     </Navbar>
                 </Col>

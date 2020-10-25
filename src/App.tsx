@@ -7,13 +7,14 @@ import {setContext} from "@apollo/client/link/context";
 import AuthorDetailContainer from "./containers/AuthorDetailContainer";
 import AddBookContainer from "./containers/AddBookContainer";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
     const httpLink = createHttpLink({
         uri: 'https://vskcaejpvbgulc7wcyxlnhhfjq.appsync-api.us-east-1.amazonaws.com/graphql',
     });
 
-    const authLink = setContext((_, { headers }) => {
+    const authLink = setContext((_, {headers}) => {
         return {
             headers: {
                 ...headers,
@@ -28,28 +29,29 @@ function App() {
     });
 
     return (
-        <ApolloProvider client={client}>
-            <Router>
-                <Switch>
-                    <Route path="/authors/:authorId/create-book" exact>
-                        <AddBookContainer />
-                    </Route>
-                    <Route path="/authors/:authorId" exact>
-                        <AuthorDetailContainer />
-                    </Route>
-                    <Route path="/add-author" exact>
-                        <AddAuthorContainer />
-                    </Route>
-                    <Route path="/authors" exact>
-                        <AuthorsContainer/>
-                    </Route>
-                    <Route path="/" exact>
-                        <Redirect to="/authors" />
-                    </Route>
-                </Switch>
-            </Router>
-        </ApolloProvider>
-
+        <Router>
+            <Switch>
+                <ErrorBoundary>
+                    <ApolloProvider client={client}>
+                        <Route path="/authors/:authorId/create-book" exact>
+                            <AddBookContainer/>
+                        </Route>
+                        <Route path="/authors/:authorId" exact>
+                            <AuthorDetailContainer/>
+                        </Route>
+                        <Route path="/add-author" exact>
+                            <AddAuthorContainer/>
+                        </Route>
+                        <Route path="/authors" exact>
+                            <AuthorsContainer/>
+                        </Route>
+                        <Route path="/" exact>
+                            <Redirect to="/authors"/>
+                        </Route>
+                    </ApolloProvider>
+                </ErrorBoundary>
+            </Switch>
+        </Router>
     );
 }
 
