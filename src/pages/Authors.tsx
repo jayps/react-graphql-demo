@@ -24,7 +24,7 @@ const AuthorListItem = styled(Link)`
 `;
 
 const AuthorsPage = () => {
-    const {authors, loading, error, getAuthors, deleteAuthor, deletingAuthor} = useContext(AuthorsContext);
+    const {authors, loading, getAuthors, deleteAuthor, deletingAuthor} = useContext(AuthorsContext);
 
     React.useEffect(() => {
         getAuthors();
@@ -33,10 +33,6 @@ const AuthorsPage = () => {
     const onClickDeleteAuthor = (event: any, id: string, name: string) => {
         event.preventDefault();
         deleteAuthor(id, name);
-    }
-
-    if (error) {
-        throw new Error('Something has gone wrong!');
     }
 
     return (
@@ -56,7 +52,7 @@ const AuthorsPage = () => {
                     )
                 }
                 {
-                    !loading && !error && authors.length > 0 && (
+                    authors.length > 0 && (
                         authors.map((author: Author) => (
                             <AuthorListItem key={author.id} to={`/authors/${author.id}`}>
                                 {author.name}

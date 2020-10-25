@@ -104,6 +104,10 @@ const AuthorsProvider = ({children, client}: any) => {
                         books: result.data.listBooks.items
                     }
                 });
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 
@@ -118,6 +122,10 @@ const AuthorsProvider = ({children, client}: any) => {
             })
             .then((res) => {
                 history.push(`/authors/${res.data.createAuthor.id}`);
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 
@@ -132,6 +140,10 @@ const AuthorsProvider = ({children, client}: any) => {
             })
             .then((res) => {
                 history.push(`/authors/${book.author}`);
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 
@@ -150,6 +162,10 @@ const AuthorsProvider = ({children, client}: any) => {
                 });
 
                 getAuthors();
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 
@@ -170,6 +186,10 @@ const AuthorsProvider = ({children, client}: any) => {
                     }
                 });
                 getAuthorById(book.author);
+            }, () => {
+                dispatch({
+                    type: 'ERROR'
+                });
             });
     }
 

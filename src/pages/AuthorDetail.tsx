@@ -11,16 +11,12 @@ import Loader from "../components/Loader";
 import {Alert} from "reactstrap";
 
 const AuthorDetail = () => {
-    const {getAuthorById, loading, error, currentAuthor, deletingBook} = useContext(AuthorsContext); // TODO: Add a method here to delete a book from an author
+    const {getAuthorById, loading, currentAuthor, deletingBook} = useContext(AuthorsContext); // TODO: Add a method here to delete a book from an author
     const {authorId} = useParams();
 
     useEffect(() => {
         getAuthorById(authorId);
     }, [])
-
-    if (error) {
-        return <PageLayout><p>Oops! Something has gone wrong. Please try again.</p></PageLayout>
-    }
 
     return (
         <PageLayout>
