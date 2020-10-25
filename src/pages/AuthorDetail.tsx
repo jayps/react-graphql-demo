@@ -1,8 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import {Link, useParams} from "react-router-dom";
-import {GetAuthorByIdQuery} from "../graphql/queries/GetAuthorById";
 import {Book} from "../types/Book";
-import {useQuery} from "@apollo/client";
 import PageLayout from "../components/PageLayout";
 import PageHeader from "../components/PageHeader";
 import BookDetail from "../components/BookDetail";
@@ -16,7 +14,7 @@ const AuthorDetail = () => {
 
     useEffect(() => {
         getAuthorById(authorId);
-    }, [])
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <PageLayout>

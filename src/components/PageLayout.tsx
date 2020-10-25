@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Container, Row, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Nav, NavbarText} from "reactstrap";
+import {Container, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Nav} from "reactstrap";
 import {NavLink} from 'react-router-dom';
 import {AuthorsContext} from "../contexts/authors/AuthorsContext";
 

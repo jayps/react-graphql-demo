@@ -1,7 +1,7 @@
 import {Author} from "../../types/Author";
 import React, {createContext, useReducer} from "react";
 import AuthorsReducer from "./AuthorsReducer";
-import {gql, useMutation, useQuery} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import {AddAuthorMutation} from "../../graphql/mutations/AddAuthorMutation";
 import {withApollo} from "@apollo/client/react/hoc";
 import {useHistory} from "react-router-dom";

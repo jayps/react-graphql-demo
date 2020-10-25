@@ -28,7 +28,7 @@ const AuthorsPage = () => {
 
     React.useEffect(() => {
         getAuthors();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const onClickDeleteAuthor = (event: any, id: string, name: string) => {
         event.preventDefault();
