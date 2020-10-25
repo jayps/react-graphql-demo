@@ -7,6 +7,7 @@ import {Alert, Button} from "reactstrap";
 import styled from "styled-components";
 import PageHeader from "../components/PageHeader";
 import Loader from "../components/Loader";
+import {Helmet} from "react-helmet";
 
 const AuthorListItem = styled(Link)`
     padding: 16px;
@@ -37,6 +38,9 @@ const AuthorsPage = () => {
 
     return (
         <PageLayout>
+            <Helmet>
+                <title>Authors | Library Demo</title>
+            </Helmet>
             <PageHeader>
                 <h1>Authors</h1>
                         <div>

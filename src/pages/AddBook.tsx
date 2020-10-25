@@ -6,6 +6,7 @@ import PageLayout from "../components/PageLayout";
 import PageHeader from "../components/PageHeader";
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import Loader from "../components/Loader";
+import {Helmet} from "react-helmet";
 
 const AddBookPage = () => {
     const {addBook, loading} = useContext(AuthorsContext);
@@ -28,6 +29,9 @@ const AddBookPage = () => {
 
     return (
         <PageLayout>
+            <Helmet>
+                <title>Create Book | Library Demo</title>
+            </Helmet>
             <Loader loading={loading} message="Creating book...">
                 <PageHeader>
                     <h1>Add Book</h1>

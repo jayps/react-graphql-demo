@@ -7,6 +7,7 @@ import BookDetail from "../components/BookDetail";
 import {AuthorsContext} from "../contexts/authors/AuthorsContext";
 import Loader from "../components/Loader";
 import {Alert} from "reactstrap";
+import {Helmet} from "react-helmet";
 
 const AuthorDetail = () => {
     const {getAuthorById, loading, currentAuthor, deletingBook} = useContext(AuthorsContext); // TODO: Add a method here to delete a book from an author
@@ -18,6 +19,9 @@ const AuthorDetail = () => {
 
     return (
         <PageLayout>
+            <Helmet>
+                <title>Author | Library Demo</title>
+            </Helmet>
             <Loader loading={loading || deletingBook} message={deletingBook ? 'Deleting book...' : 'Loading author...'}>
                 <PageHeader>
                     <h1>Author: {currentAuthor?.name}</h1>

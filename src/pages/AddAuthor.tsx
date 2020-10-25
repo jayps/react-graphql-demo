@@ -4,6 +4,7 @@ import PageHeader from "../components/PageHeader";
 import PageLayout from "../components/PageLayout";
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import Loader from "../components/Loader";
+import {Helmet} from "react-helmet";
 
 const AddAuthorPage = () => {
     const {addAuthor, loading} = useContext(AuthorsContext);
@@ -16,6 +17,9 @@ const AddAuthorPage = () => {
 
     return (
         <PageLayout>
+            <Helmet>
+                <title>Create Author | Library Demo</title>
+            </Helmet>
             <Loader loading={loading} message="Creating author...">
                 <PageHeader>
                     <h1>Add Author</h1>
