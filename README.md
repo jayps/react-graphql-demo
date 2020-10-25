@@ -5,3 +5,6 @@ This application was created as a demo for React with Typescript, GraphQL and Co
 - Clone the repo `git clone https://github.com/jayps/react-graphql-demo.git`
 - Run `yarn install` to install dependencies
 - Run `yarn start` to run the project locally.
+
+## Want to see it running?
+Check out https://jpmeyer-library-demo.netlify.app/authors!
