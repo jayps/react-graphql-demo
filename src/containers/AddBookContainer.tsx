@@ -1,13 +1,13 @@
 import React from 'react';
 import AuthorsContext from "../contexts/authors/AuthorsContext";
-import AuthorDetail from "../pages/AuthorDetail";
+import AddBookPage from "../pages/AddBook";
 
-const AuthorDetailContainer = () => {
+const AddBookContainer = () => {
     return (
         <AuthorsContext>
-            <AuthorDetail/>
+            <AddBookPage/>
         </AuthorsContext>
     )
 }
 
-export default AuthorDetailContainer;
+export default AddBookContainer;

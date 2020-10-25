@@ -2,17 +2,50 @@ import React, {useContext} from 'react';
 import {AuthorsContext} from "../contexts/authors/AuthorsContext";
 import {Author} from "../types/Author";
 import {Link} from "react-router-dom";
+import PageLayout from "../components/PageLayout";
+import {Button} from "reactstrap";
+import styled from "styled-components";
+import PageHeader from "../components/PageHeader";
+
+const AuthorListItem = styled(Link)`
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+    }
+`;
 
 const AuthorsPage = () => {
     const {authors, loading, error, getAuthors, deleteAuthor} = useContext(AuthorsContext);
 
     React.useEffect(() => {
         getAuthors();
-    }, [])
+    }, []);
+
+    const onClickDeleteAuthor = (event: any, id: string, name: string) => {
+        event.preventDefault();
+        deleteAuthor(id, name);
+    }
 
     return (
-        <div>
-            <h1>Authors</h1>
+        <PageLayout>
+            <PageHeader>
+                <h1>Authors</h1>
+                {
+                    !loading && !error && (
+                        <div>
+                            <Link to="/add-author" className="btn btn-primary">Add Author</Link>
+                        </div>
+                    )
+                }
+            </PageHeader>
             {
                 loading && (
                     <p>Loading...</p>
@@ -24,14 +57,6 @@ const AuthorsPage = () => {
                 )
             }
 
-            {
-                !loading && !error && (
-                    <div>
-                        <Link to="/add-author">Add author</Link>
-                        <hr />
-                    </div>
-                )
-            }
 
             {
                 !loading && !error && authors.length === 0 && (
@@ -43,13 +68,17 @@ const AuthorsPage = () => {
             {
                 !loading && !error && authors.length > 0 && (
                     authors.map((author: Author) => (
-                        <div>
-                            <button onClick={() => deleteAuthor(author.id, author.name)}>&times;</button>&nbsp;<Link to={`/authors/${author.id}`}>{author.name}</Link>
-                        </div>
+                        <AuthorListItem key={author.id} to={`/authors/${author.id}`}>
+                            {author.name}
+                            <Button onClick={(e) => onClickDeleteAuthor(e, author.id, author.name)}
+                                    className="btn btn-danger">
+                                Delete
+                            </Button>
+                        </AuthorListItem>
                     ))
                 )
             }
-        </div>
+        </PageLayout>
     )
 }
 

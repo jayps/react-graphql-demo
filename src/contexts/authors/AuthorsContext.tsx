@@ -1,21 +1,28 @@
 import {Author} from "../../types/Author";
 import React, {createContext, useReducer} from "react";
 import AuthorsReducer from "./AuthorsReducer";
-import {gql, useMutation} from '@apollo/client';
+import {gql, useMutation, useQuery} from '@apollo/client';
 import {AddAuthorMutation} from "../../graphql/mutations/AddAuthorMutation";
 import {withApollo} from "@apollo/client/react/hoc";
-import { v4 as uuidv4 } from 'uuid';
 import {useHistory} from "react-router-dom";
 import {DeleteAuthorMutation} from "../../graphql/mutations/DeleteAuthorMutation";
+import {AddBookMutation} from "../../graphql/mutations/AddBookMutation";
+import {Book} from "../../types/Book";
+import {DeleteBookMutation} from "../../graphql/mutations/DeleteBookMutation";
+import {GetAllAuthorsQuery} from "../../graphql/queries/GetAllAuthors";
+import {GetAuthorByIdQuery} from "../../graphql/queries/GetAuthorById";
 
 export interface AuthorsState {
     authors: Author[];
     loading: boolean;
     error: boolean;
-    currentAuthor?: Author;
+    currentAuthor?: Author | null;
     addAuthor: (name: string) => void
+    addBook: (book: Book) => void
     getAuthors: () => void,
+    getAuthorById: (id: string) => void,
     deleteAuthor: (id: string, name: string) => void,
+    deleteBook: (book: Book) => void,
 }
 
 const initialState: AuthorsState = {
@@ -25,10 +32,18 @@ const initialState: AuthorsState = {
     currentAuthor: null,
     addAuthor: () => {
     },
+    addBook: () => {
+    },
     getAuthors: () => {
 
     },
+    getAuthorById: () => {
+
+    },
     deleteAuthor: () => {
+
+    },
+    deleteBook: () => {
 
     }
 }
@@ -37,7 +52,9 @@ export const AuthorsContext = createContext(initialState);
 const AuthorsProvider = ({children, client}: any) => {
     const [state, dispatch] = useReducer(AuthorsReducer, initialState);
     const [addAuthorMutation] = useMutation(AddAuthorMutation);
+    const [addBookMutation] = useMutation(AddBookMutation);
     const [deleteAuthorMutation] = useMutation(DeleteAuthorMutation);
+    const [deleteBookMutation] = useMutation(DeleteBookMutation);
     const history = useHistory()
 
     const getAuthors = () => {
@@ -45,23 +62,9 @@ const AuthorsProvider = ({children, client}: any) => {
             type: 'GET_AUTHORS'
         });
 
-        // TODO: Instead of running client.query like this, use the useQuery hook instead. Probably doesn't belong here.
         client
             .query({
-                query: gql`
-                    query listAuthors {
-                        listAuthors {
-                            items {
-                                id
-                                name
-                                books {
-                                    id
-                                    title
-                                }
-                            }
-                        }
-                    }
-    `
+                query: GetAllAuthorsQuery
             })
             .then((result: any) => {
                 client.resetStore(); // TODO: Find a better way of not caching this result.
@@ -72,16 +75,48 @@ const AuthorsProvider = ({children, client}: any) => {
             });
     }
 
+    const getAuthorById = (id: string) => {
+        dispatch({
+            type: 'GET_AUTHOR'
+        });
+
+        client
+            .query({
+                query: GetAuthorByIdQuery,
+                variables: {
+                    id
+                }
+            })
+            .then((result: any) => {
+                client.resetStore(); // TODO: Find a better way of not caching this result.
+                dispatch({
+                    type: 'GET_AUTHOR_SUCCESS',
+                    payload: {
+                        ...result.data.getAuthor,
+                        books: result.data.listBooks.items
+                    }
+                });
+            });
+    }
+
     const addAuthor = (name: string) => {
         addAuthorMutation(
             {
-                variables: {
-                    createauthorinput: { id: uuidv4(), name }
-                }
+                variables: {name}
             })
             .then((res) => {
                 getAuthors();
                 history.push('/');
+            });
+    }
+
+    const addBook = (book: Book) => {
+        addBookMutation(
+            {
+                variables: {...book}
+            })
+            .then((res) => {
+                history.push(`/authors/${book.author}`);
             });
     }
 
@@ -92,12 +127,30 @@ const AuthorsProvider = ({children, client}: any) => {
 
         deleteAuthorMutation(
             {
-                variables: {
-                    input: { id, name }
-                }
+                variables: {id}
             })
             .then((res) => {
                 getAuthors();
+            });
+    }
+
+    const deleteBook = (book: Book) => {
+        dispatch({
+            type: 'DELETE_BOOK'
+        });
+
+        deleteBookMutation(
+            {
+                variables: {id: book.id}
+            })
+            .then((res) => {
+                dispatch({
+                    type: 'DELETE_BOOK_SUCCESS',
+                    payload: {
+                        id: book.id
+                    }
+                });
+                getAuthorById(book.author);
             });
     }
 
@@ -106,9 +159,13 @@ const AuthorsProvider = ({children, client}: any) => {
             authors: state.authors,
             loading: state.loading,
             error: state.error,
-            addAuthor: addAuthor,
-            getAuthors: getAuthors,
-            deleteAuthor: deleteAuthor
+            currentAuthor: state.currentAuthor,
+            addAuthor,
+            getAuthorById,
+            addBook,
+            getAuthors,
+            deleteAuthor,
+            deleteBook
         }}>
             {children}
         </AuthorsContext.Provider>

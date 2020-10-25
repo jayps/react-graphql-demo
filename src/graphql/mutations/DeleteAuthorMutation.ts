@@ -1,10 +1,9 @@
 import { gql } from '@apollo/client';
 
 export const DeleteAuthorMutation = gql`
-  mutation deleteAuthor($input: DeleteAuthorInput!) {
-    deleteAuthor(input: $input){
+  mutation deleteAuthor($id: ID!){
+      deleteAuthor(input: {id: $id}){
         id
-        name
+      }
     }
-  }
 `;

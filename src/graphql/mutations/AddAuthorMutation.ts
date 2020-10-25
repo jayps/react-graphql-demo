@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const AddAuthorMutation = gql`
-  mutation createAuthor($createauthorinput: CreateAuthorInput!) {
-      createAuthor(input: $createauthorinput) {
+  mutation createAuthor($name: String!) {
+      createAuthor(input: {name: $name}){
         id
         name
       }
     }
+
 `;
